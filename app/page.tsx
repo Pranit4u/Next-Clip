@@ -47,10 +47,9 @@ export default function Page() {
         >
           <PinMessage msg={labels.length ? 'Labels' : 'No Labels'} />
           {labels.map((label, ind) => (
-            <div key={ind} className='flex h-6 items-center justify-between bg-gray-300 dark:bg-slate-700 rounded-r-md my-2 pl-1 cursor-pointer'>
+            <div key={ind} onClick={() => handleLabelClick(label.name)} className='flex h-6 items-center justify-between bg-gray-300 dark:bg-slate-700 rounded-r-md my-2 pl-1 cursor-pointer'>
               <div
                 className='overflow-hidden'
-                onClick={() => handleLabelClick(label.name)}
                 style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
               >
                 {label.name}

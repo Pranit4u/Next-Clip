@@ -8,6 +8,7 @@ import { copyToClipboard } from '../lib/utils/helper'
 
 const ClipItem = ({ clip, removeClip }: { clip: ClipInterface, removeClip: (clipID: string) => void }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [hovered, setHovered] = React.useState(false);
   const open = Boolean(anchorEl);
 
   const clips = useAppSelector(state => state.clips.value);
@@ -44,24 +45,33 @@ const ClipItem = ({ clip, removeClip }: { clip: ClipInterface, removeClip: (clip
   };
 
   return (
-    <div className={`relative border border-gray-300 dark:border-slate-700 border-1 rounded-md my-1 cursor-pointer hover:border-gray-700 dark:hover:border-slate-400 hover:shadow-lg active:bg-gray-100 dark:active:bg-slate-600`}>
+    <div className={`relative border border-gray-300 dark:border-slate-700 border-1 rounded-md my-2 cursor-pointer hover:border-gray-700 dark:hover:border-slate-400 hover:shadow-lg active:bg-gray-100 dark:active:bg-slate-600`}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
       <div className='p-2'
         onClick={() => copyToClipboard(clip.text)}
       >
-        {clip.text}
+        {clip.maskText ? clip.maskText : clip.text.split('\n').map((line, index) => (
+          <React.Fragment key={index}>
+            {line}
+            {index !== clip.text.split('\n').length - 1 && <br />}
+          </React.Fragment>
+        ))}
       </div>
-      <div className='absolute right-0 top-0'>
+      <div className={`absolute right-0 top-0 ${hovered ? 'block' : 'hidden'}`}>
         <div className='rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 p-1'
           onClick={handleIconClick}
           id="basic-button"
           aria-controls={open ? 'basic-menu' : undefined}
           aria-haspopup="true"
           aria-expanded={open ? 'true' : undefined}
+          data-tooltip-id="clip-option-tooltip"
         >
           <HiMiniEllipsisHorizontal />
         </div>
         <Menu
-          id="basic-menu" 
+          id="basic-menu"
           anchorEl={anchorEl}
           anchorOrigin={{
             vertical: enoughSpaceBelow() ? 'bottom' : 'top',

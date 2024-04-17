@@ -2,12 +2,14 @@ import toast from "react-hot-toast";
 import { ClipInterface, LabelInterface } from "./definition"
 import { v4 as uuidv4 } from 'uuid';
 
-export const convertClip = (text: string, labelIDs: string[] = []): ClipInterface => {
+export const convertClip = (text: string, clipMaskText: string, labelIDs: string[] = []): ClipInterface => {
   return {
     id: uuidv4(),
     text: text,
+    maskText: clipMaskText,
     pinned: false,
     labelIDs: labelIDs,
+    createdAt: new Date().toISOString(),
   }
 }
 
@@ -16,6 +18,7 @@ export const convertLabel = (name: string, clipIDs: string[] = []): LabelInterfa
     id: uuidv4(),
     name: name,
     clipIDs: clipIDs,
+    createdAt: new Date().toISOString(),
   }
 }
 
